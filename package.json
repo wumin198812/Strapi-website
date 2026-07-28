@@ -18,7 +18,8 @@
     "lint": "turbo lint",
     "lint:fix": "turbo lint:fix",
     "prepare": "husky",
-    "setup:apps": "find . -name '*.example' -exec sh -c 'cp -n \"$1\" \"${1%.example}\"' _ {} \\;",
+   
+    "setup:apps": "echo skip on windows",
     "start:strapi": "turbo run start --filter=@repo/strapi",
     "start:ui": "turbo run start --filter=@repo/ui",
     "test": "turbo run test",

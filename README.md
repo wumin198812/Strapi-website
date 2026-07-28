@@ -130,3 +130,9 @@ Detailed docs are in the [/docs](./docs) directory and in individual app/package
 ## Credits
 
 Built on top of [strapi-next-monorepo-starter](https://github.com/notum-cz/strapi-next-monorepo-starter) by [Notum](https://github.com/notum-cz).
+
+### 后台登陆[http://localhost:1337/admin](http://localhost:1337/admin)
+
+账号：634187641@qq.com
+
+密码：Admin123
