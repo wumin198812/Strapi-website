@@ -131,6 +131,34 @@ Detailed docs are in the [/docs](./docs) directory and in individual app/package
 
 Built on top of [strapi-next-monorepo-starter](https://github.com/notum-cz/strapi-next-monorepo-starter) by [Notum](https://github.com/notum-cz).
 
+### Strapi配置数据库：public.sql导入到数据库
+
+配置apps/.env文件
+
+```
+# The database client to use.
+DATABASE_CLIENT=postgres
+
+# The database host.
+DATABASE_HOST=localhost
+
+# The database port.
+DATABASE_PORT=5432
+
+# The database name.
+DATABASE_NAME=strapi_db
+
+# The database username.
+DATABASE_USERNAME=admin
+
+# The database password.
+DATABASE_PASSWORD=admin123
+
+# Enable SSL support.
+DATABASE_SSL=false
+
+```
+
 ### 后台登陆[http://localhost:1337/admin](http://localhost:1337/admin)
 
 账号：634187641@qq.com
