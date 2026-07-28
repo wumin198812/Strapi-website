@@ -1,0 +1,271 @@
+import "@/styles/globals.css"
+
+import type { Metadata, Viewport } from "next"
+import { notFound } from "next/navigation"
+import Script from "next/script"
+import type { Locale } from "next-intl"
+import { getTranslations, setRequestLocale } from "next-intl/server"
+
+import { DraftModeBanner } from "@/components/elementary/DraftModeBanner"
+import { ErrorBoundary } from "@/components/elementary/ErrorBoundary"
+import { StrapiPreviewListener } from "@/components/elementary/strapi-preview-listener"
+import { TailwindIndicator } from "@/components/elementary/TailwindIndicator"
+import { StrapiStructuredData } from "@/components/page-builder/components/seo-utilities/StrapiStructuredData"
+import { StrapiFooter } from "@/components/page-builder/single-types/footer/StrapiFooter"
+import { StrapiHeader } from "@/components/page-builder/single-types/header/StrapiHeader"
+import { ClientProviders } from "@/components/providers/ClientProviders"
+import { ServerProviders } from "@/components/providers/ServerProviders"
+import { TrackingScripts } from "@/components/providers/TrackingScripts"
+import { Toaster } from "@/components/ui/sonner"
+import { env } from "@/env.mjs"
+import { debugStaticParams } from "@/lib/build"
+import { getEnvVar } from "@/lib/env-vars"
+import { fontPoppins } from "@/lib/fonts"
+import { isProduction } from "@/lib/general-helpers"
+import { routing } from "@/lib/navigation"
+import { buildOrgWebsiteGraph } from "@/lib/structured-data/site-graph"
+import { cn } from "@/lib/styles"
+
+export function generateStaticParams() {
+  const locales = routing.locales.map((locale) => ({ locale }))
+  debugStaticParams(locales, "[locale]")
+
+  return locales
+}
+
+export const metadata: Metadata = {
+  title: {
+    template: "%s",
+    default: "",
+  },
+
+  /**
+   * Site-wide favicon set. Defined on the root layout so every route inherits
+   * it — Next.js shallow-merges metadata, so pages that don't set `icons`
+   * (not-found, dev, error boundaries) still get these.
+   */
+  icons: {
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/favicon-16x16.png", type: "image/png", sizes: "16x16" },
+      { url: "/favicon-32x32.png", type: "image/png", sizes: "32x32" },
+    ],
+    apple: "/apple-touch-icon.png",
+  },
+  manifest: "/site.webmanifest",
+
+  /**
+   * Site-wide noindex safety net for every non-production deployment. In
+   * production this field is omitted, so per-page metadata (Strapi SEO via
+   * `getMetaRobots`) decides indexing.
+   */
+  ...(isProduction()
+    ? {}
+    : {
+        robots: {
+          index: false,
+          follow: false,
+          nocache: true,
+          googleBot: {
+            index: false,
+            follow: false,
+            noimageindex: true,
+          },
+        },
+      }),
+}
+
+export const viewport: Viewport = {
+  themeColor: "#4945ff",
+}
+
+export default async function RootLayout({
+  children,
+  params,
+}: LayoutProps<"/[locale]">) {
+  const { locale } = (await params) as { locale: Locale }
+
+  // Enable static rendering
+  // https://next-intl-docs.vercel.app/docs/getting-started/app-router/with-i18n-routing#static-rendering
+  setRequestLocale(locale)
+
+  if (!routing.locales.includes(locale)) {
+    notFound()
+  }
+
+  /**
+   * Global Organization + WebSite JSON-LD, emitted once on every route so the
+   * whole site exposes the same baseline structured data the legacy strapi.io
+   * site had. Per-page `WebPage` nodes (rendered by each page view) link back to
+   * these via `@id`.
+   */
+  const t = await getTranslations({ locale, namespace: "seo" })
+  const siteUrl = getEnvVar("APP_PUBLIC_URL")
+  const siteGraph = siteUrl
+    ? buildOrgWebsiteGraph({
+        siteUrl,
+        name: t("og.siteName"),
+        description: t("metaDescription"),
+        locale,
+      })
+    : null
+
+  /**
+   * This allows you to make following env variables RUNTIME.
+   *
+   * Following variables aren't going to be embedded during the build-time. To avoid embedding,
+   * you must not use "NEXT_PUBLIC_" prefix for env variable that you want to keep
+   * private and dynamic at runtime.
+   *
+   * Instead, use this method to pass only the required env variables to the client side.
+   * To access them from CSR or SSR context, read them using `getEnvVar()` helper.
+   *
+   * Do not include "STRAPI_URL", we want to keep it private (hence why we use proxying).
+   */
+  const CSR_ENVs = [
+    "NODE_ENV",
+    "DEBUG_STRAPI_CLIENT_API_CALLS",
+    "SHOW_NON_BLOCKING_ERRORS",
+    "APP_PUBLIC_URL",
+  ]
+
+  /**
+   * Origin of the Strapi media CDN, used only for a `preconnect` hint below.
+   * The LCP hero media (video + image) and all SVG logos come from here, so
+   * warming the connection early shaves the cross-origin DNS/TCP/TLS handshake
+   * off the critical path. `env.STRAPI_MEDIA_URL` is validated as a URL, so
+   * `new URL().origin` is safe when set.
+   */
+  const strapiMediaOrigin = env.STRAPI_MEDIA_URL
+    ? new URL(env.STRAPI_MEDIA_URL).origin
+    : null
+
+  /**
+   * Third-party resource hints mirror the integrations loaded by
+   * `<TrackingScripts />` (which only render in production). `preconnect` is
+   * reserved for origins on the early critical path (GTM, Cookiebot consent);
+   * everything loaded later (analytics, ad pixels, lazy Kapa widget) gets the
+   * cheaper `dns-prefetch` so we don't tie up connections speculatively.
+   */
+  const showTrackingHints = isProduction()
+
+  return (
+    <html lang={locale} suppressHydrationWarning>
+      <head>
+        {/*
+          Resource hints — emitted in <head> so they reach the browser before the
+          body scripts/media. The media CDN preconnect is the biggest LCP win
+          (hero video + image load from there).
+        */}
+        {strapiMediaOrigin && (
+          <>
+            <link rel="preconnect" href={strapiMediaOrigin} />
+            <link rel="dns-prefetch" href={strapiMediaOrigin} />
+          </>
+        )}
+
+        {showTrackingHints && (
+          <>
+            {env.GTM_ID && (
+              <link rel="preconnect" href="https://www.googletagmanager.com" />
+            )}
+
+            {env.COOKIEBOT_ID && (
+              <>
+                <link rel="preconnect" href="https://consent.cookiebot.com" />
+                <link
+                  rel="dns-prefetch"
+                  href="https://consentcdn.cookiebot.com"
+                />
+              </>
+            )}
+
+            {env.HOTJAR_ID && (
+              <>
+                <link rel="dns-prefetch" href="https://static.hotjar.com" />
+                <link rel="dns-prefetch" href="https://script.hotjar.com" />
+              </>
+            )}
+
+            {env.KAPA_WEBSITE_ID && (
+              <link rel="dns-prefetch" href="https://widget.kapa.ai" />
+            )}
+
+            {/* Ad/analytics pixels fired through GTM (LinkedIn, Bing, Google Ads). */}
+            {env.GTM_ID && (
+              <>
+                <link rel="dns-prefetch" href="https://snap.licdn.com" />
+                <link rel="dns-prefetch" href="https://px.ads.linkedin.com" />
+                <link rel="dns-prefetch" href="https://bat.bing.com" />
+                <link rel="dns-prefetch" href="https://www.google.com" />
+              </>
+            )}
+          </>
+        )}
+
+        <Script id="csr-config" strategy="beforeInteractive">
+          {`
+         window.CSR_CONFIG = window.CSR_CONFIG || {};
+         window.CSR_CONFIG = ${JSON.stringify({
+           ...CSR_ENVs.reduce(
+             (acc, curr) => {
+               acc[curr] = process.env?.[curr]
+
+               return acc
+             },
+             {} as Record<string, string | undefined>
+           ),
+         })};
+       `}
+        </Script>
+      </head>
+      <body
+        className={cn(
+          "text-foreground min-h-screen bg-white font-sans",
+          fontPoppins.variable
+        )}
+      >
+        <TrackingScripts />
+        {siteGraph && (
+          <StrapiStructuredData
+            structuredData={siteGraph}
+            id="siteOrganizationWebsite"
+          />
+        )}
+        <ServerProviders>
+          <StrapiPreviewListener />
+          <ClientProviders>
+            <div className="relative flex min-h-screen flex-col">
+              {/*
+                data-slot wrappers: targeted by CSS `:has([data-minimal-layout])`
+                in globals.css to hide header/footer on pages with minimalLayout
+                enabled. Header/footer stay in the layout (not moved to page level)
+                to preserve navigation state across client-side page transitions.
+                See StrapiPageView for the full explanation.
+              */}
+              <div data-slot="site-header">
+                <ErrorBoundary showErrorMessage>
+                  <StrapiHeader locale={locale} />
+                </ErrorBoundary>
+              </div>
+
+              <div className="flex-1">{children}</div>
+
+              <TailwindIndicator />
+
+              <DraftModeBanner />
+
+              <Toaster />
+
+              <div data-slot="site-footer">
+                <ErrorBoundary hideFallback>
+                  <StrapiFooter locale={locale} />
+                </ErrorBoundary>
+              </div>
+            </div>
+          </ClientProviders>
+        </ServerProviders>
+      </body>
+    </html>
+  )
+}

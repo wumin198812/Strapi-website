@@ -1,0 +1,138 @@
+{
+  "kind": "collectionType",
+  "collectionName": "pages",
+  "info": {
+    "singularName": "page",
+    "pluralName": "pages",
+    "displayName": "Page",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {
+    "i18n": {
+      "localized": true
+    }
+  },
+  "attributes": {
+    "title": {
+      "type": "string",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "required": true
+    },
+    "breadcrumbTitle": {
+      "type": "string",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "slug": {
+      "type": "string",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "required": true,
+      "regex": "^[a-z0-9/-]+$"
+    },
+    "fullPath": {
+      "type": "string",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "required": false,
+      "unique": true
+    },
+    "content": {
+      "type": "dynamiczone",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "components": [
+        "plans.plan-pricing-cards",
+        "plans.plan-comparison-table",
+        "sections.faq-section",
+        "sections.how-it-works",
+        "sections.section-header",
+        "sections.two-columns-benefits",
+        "sections.two-column-grid",
+        "sections.three-column-grid",
+        "cards.feature-card",
+        "cards.content-card",
+        "cards.case-study-card",
+        "media.image",
+        "media.image-gallery",
+        "media.brand-logo-grid",
+        "testimonials.quote",
+        "forms.newsletter",
+        "sections.testimonies",
+        "sections.reviews",
+        "sections.meet-the-team",
+        "media.video",
+        "sections.hero",
+        "sections.hero-home",
+        "sections.feature-card-grid",
+        "forms.hubspot-form",
+        "forms.hubspot-form-ssr",
+        "forms.conversion",
+        "forms.demo-conversion",
+        "migration.data-sink",
+        "media.embed",
+        "sections.cta-banner",
+        "sections.community-banner",
+        "sections.comparator-grid",
+        "sections.cookie-declaration",
+        "sections.disclaimer",
+        "sections.richtext",
+        "sections.dynamic-case-studies-grid",
+        "sections.dynamic-features-grid",
+        "sections.feature-overview",
+        "sections.tabbed-feature-overview",
+        "sections.news-list"
+      ]
+    },
+    "children": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::page.page",
+      "mappedBy": "parent"
+    },
+    "parent": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::page.page",
+      "inversedBy": "children"
+    },
+    "minimalLayout": {
+      "type": "boolean",
+      "pluginOptions": {
+        "i18n": {
+          "localized": false
+        }
+      },
+      "default": false
+    },
+    "seo": {
+      "type": "component",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "component": "shared.seo",
+      "repeatable": false
+    }
+  }
+}

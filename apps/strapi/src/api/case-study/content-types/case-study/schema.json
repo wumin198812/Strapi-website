@@ -1,0 +1,88 @@
+{
+  "kind": "collectionType",
+  "collectionName": "case_studies",
+  "info": {
+    "singularName": "case-study",
+    "pluralName": "case-studies",
+    "displayName": "Case Study",
+    "description": "Long-form story showcasing a customer success."
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "title",
+      "required": true
+    },
+    "description": {
+      "type": "text"
+    },
+    "companyName": {
+      "type": "string"
+    },
+    "originalPublishedAt": {
+      "type": "datetime"
+    },
+    "coverImage": {
+      "type": "component",
+      "component": "media.image",
+      "repeatable": false
+    },
+    "logoImage": {
+      "type": "component",
+      "component": "media.image",
+      "repeatable": false
+    },
+    "seo": {
+      "type": "component",
+      "component": "shared.seo",
+      "repeatable": false
+    },
+    "categories": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::case-study-category.case-study-category"
+    },
+    "content": {
+      "type": "dynamiczone",
+      "components": [
+        "sections.faq-section",
+        "sections.how-it-works",
+        "sections.section-header",
+        "sections.two-columns-benefits",
+        "sections.two-column-grid",
+        "cards.feature-card",
+        "cards.content-card",
+        "cards.case-study-card",
+        "media.image",
+        "media.image-gallery",
+        "media.brand-logo-grid",
+        "testimonials.quote",
+        "forms.newsletter",
+        "sections.testimonies",
+        "sections.meet-the-team",
+        "media.video",
+        "sections.hero",
+        "sections.hero-home",
+        "sections.feature-card-grid",
+        "forms.hubspot-form",
+        "forms.hubspot-form-ssr",
+        "forms.conversion",
+        "migration.data-sink",
+        "media.embed",
+        "sections.cta-banner",
+        "sections.community-banner",
+        "sections.comparator-grid",
+        "sections.disclaimer",
+        "sections.richtext"
+      ]
+    }
+  }
+}

@@ -1,0 +1,268 @@
+/* ── Theme animations ── */
+
+@theme inline {
+  --animate-shine: shine var(--duration) infinite linear;
+
+  @keyframes shine {
+    0% {
+      background-position: 0% 0%;
+    }
+    50% {
+      background-position: 100% 100%;
+    }
+    to {
+      background-position: 0% 0%;
+    }
+  }
+
+  --animate-blink-cursor: blink-cursor 1.2s step-end infinite;
+  @keyframes blink-cursor {
+    0%,
+    49% {
+      opacity: 1;
+    }
+    50%,
+    100% {
+      opacity: 0;
+    }
+  }
+
+  --animate-char-fade-out: char-fade-out 110ms ease-in forwards;
+  @keyframes char-fade-out {
+    to {
+      opacity: 0;
+      transform: translateY(0.25em);
+    }
+  }
+}
+
+/* ── Reveal animations (generic) ── */
+
+/**
+ * Reveal animations disabled. The `animate-reveal-cascade`,
+ * `animate-border-reveal` and `animate-ring-reveal` class names are kept in the
+ * JSX but the underlying utilities/keyframes are commented out so elements
+ * render in their final visible state with no entrance animation. Uncomment to
+ * restore the reveal effect.
+ */
+
+/*
+@keyframes reveal-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes border-fade-in {
+  from {
+    border-color: transparent;
+  }
+}
+
+@keyframes ring-fade-in {
+  from {
+    --tw-ring-color: transparent;
+  }
+}
+
+@utility animate-reveal-cascade {
+  & > * {
+    opacity: 0;
+    animation: reveal-fade-in 1000ms var(--ease-reveal) forwards;
+  }
+
+  & > *:nth-child(1) {
+    animation-delay: var(--reveal-delay, 180ms);
+  }
+
+  & > *:nth-child(2) {
+    animation-delay: calc(var(--reveal-delay, 180ms) + 200ms);
+  }
+
+  & > *:nth-child(3) {
+    animation-delay: calc(var(--reveal-delay, 180ms) + 400ms);
+  }
+
+  & > *:nth-child(4) {
+    animation-delay: calc(var(--reveal-delay, 180ms) + 600ms);
+  }
+
+  & > *:nth-child(5) {
+    animation-delay: calc(var(--reveal-delay, 180ms) + 800ms);
+  }
+}
+
+@utility animate-border-reveal {
+  animation: border-fade-in 1000ms var(--ease-reveal) var(--reveal-delay, 180ms)
+    both;
+}
+
+@utility animate-ring-reveal {
+  animation: ring-fade-in 1000ms var(--ease-reveal) var(--reveal-delay, 180ms)
+    both;
+}
+*/
+
+/**
+ * Global reduced-motion policy. Users who request reduced motion get a single,
+ * near-instant frame for every CSS animation/transition instead of movement.
+ * This covers all current AND future animations site-wide — reveals, the hero
+ * glow drift, the shimmer, the typing cursor, Radix enter/exit, accordions,
+ * spinners, etc. — without having to enumerate each one.
+ *
+ * Animations that use `forwards`/`both` fill still resolve to their final
+ * visible state, so revealed content (including the hero LCP element) ends up
+ * shown, not hidden.
+ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-delay: 0ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  /**
+   * Carve-out: the navbar theme switch is a *scroll-driven* animation
+   * (`animation-timeline: scroll()`) that maps scroll position to colour — it
+   * encodes state, not motion, so it must keep ticking off the scroll timeline
+   * rather than being frozen to a single frame.
+   */
+  [class*="animation-timeline:scroll"] {
+    animation-duration: auto !important;
+  }
+}
+
+/* ── Progress animations ── */
+
+@keyframes feature-progress {
+  from {
+    width: 0%;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [style*="feature-progress"] {
+    animation: none !important;
+    width: 100% !important;
+  }
+}
+
+/* ── Top banner (dismissible) ── */
+
+/**
+ * The banner renders open in the static HTML; the pre-paint inline script in
+ * StrapiTopBanner sets `data-top-banner-dismissed` on <html> for visitors who
+ * dismissed this version, and these rules collapse it.
+ *
+ * On an already-dismissed page load the flag is set *before* first paint, so the
+ * banner starts at height 0 and nothing animates (initial state doesn't
+ * transition). The height transition only plays when the user clicks dismiss at
+ * runtime, giving a smooth collapse without any entrance animation.
+ */
+[data-top-banner] {
+  overflow: hidden;
+  transition: height 300ms ease-in-out;
+}
+
+html[data-top-banner-dismissed] [data-top-banner] {
+  height: 0;
+}
+
+/* ── Navigation animations ── */
+
+@property --nav-scrolled {
+  syntax: "<integer>";
+  initial-value: 0;
+  inherits: true;
+}
+
+@keyframes mobile-menu-open {
+  from {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+}
+
+@keyframes nav-scroll-detect {
+  to {
+    --nav-scrolled: 1;
+    color: var(--nav-text-scrolled);
+    --nav-link-hover: var(--nav-link-hover-scrolled);
+    --nav-logo-default-opacity: 1;
+    --nav-logo-light-opacity: 0;
+  }
+}
+
+/* ── Spinner ── */
+
+@keyframes spinner-move {
+  0% {
+    background-position:
+      0 0,
+      100% 0,
+      100% 100%,
+      0 100%;
+    width: var(--_s);
+    height: var(--_s);
+  }
+  33% {
+    background-position:
+      0 0,
+      100% 0,
+      100% 100%,
+      0 100%;
+    width: var(--_expanded);
+    height: var(--_expanded);
+  }
+  66% {
+    background-position:
+      100% 0,
+      100% 100%,
+      0 100%,
+      0 0;
+    width: var(--_expanded);
+    height: var(--_expanded);
+  }
+  100% {
+    background-position:
+      100% 0,
+      100% 100%,
+      0 100%,
+      0 0;
+    width: var(--_s);
+    height: var(--_s);
+  }
+}
+
+.spinner-container {
+  --_s: var(--spinner-size, 40px);
+  --_expanded: calc(var(--_s) * 1.5);
+  display: inline-grid;
+  place-items: center;
+  width: var(--_expanded);
+  height: var(--_expanded);
+}
+
+.spinner {
+  --_s: inherit;
+  --_expanded: inherit;
+  --_dot: calc(var(--_s) * 0.525);
+  --_bg: no-repeat linear-gradient(currentColor 0 0);
+  display: inline-block;
+  background: var(--_bg), var(--_bg), var(--_bg), var(--_bg);
+  background-size: var(--_dot) var(--_dot);
+  animation: spinner-move 1.5s infinite cubic-bezier(0.3, 1, 0, 1);
+}

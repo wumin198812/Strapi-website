@@ -1,0 +1,19 @@
+{
+  "collectionName": "components_utilities_accordions",
+  "info": {
+    "displayName": "Accordions",
+    "icon": "stack",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "question": {
+      "type": "string",
+      "required": true
+    },
+    "answer": {
+      "type": "richtext",
+      "required": true
+    }
+  }
+}

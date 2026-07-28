@@ -1,0 +1,190 @@
+"use client"
+
+import type { Data } from "@repo/strapi-types"
+import { useTranslations } from "next-intl"
+import { useEffect, useRef, useState, useTransition } from "react"
+
+import {
+  type FilterOption,
+  SearchFilterSidebar,
+} from "@/components/elementary/SearchFilterSidebar"
+import { StrapiBasicImage } from "@/components/page-builder/components/utilities/StrapiBasicImage"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent } from "@/components/ui/card"
+import { Link } from "@/lib/navigation"
+import { cn } from "@/lib/styles"
+
+import type {
+  FeaturePageHit,
+  SearchFeaturePagesArgs,
+} from "./feature-pages-search-types"
+
+interface FeaturePagesGridProps {
+  readonly locale: string
+  readonly initialHits: readonly FeaturePageHit[]
+  readonly initialTotal: number
+  // Complete feature-category list from the Meilisearch facet distribution (not just
+  // the categories present in the loaded hits).
+  readonly categoryOptions: readonly FilterOption[]
+  readonly pageSize?: number
+  readonly searchAction: (
+    args: SearchFeaturePagesArgs
+  ) => Promise<{ hits: readonly FeaturePageHit[]; total: number }>
+  readonly className?: string
+}
+
+const DEFAULT_PAGE_SIZE = 12
+
+export function FeaturePagesGrid({
+  locale,
+  initialHits,
+  initialTotal,
+  categoryOptions,
+  pageSize = DEFAULT_PAGE_SIZE,
+  searchAction,
+  className,
+}: FeaturePagesGridProps) {
+  const t = useTranslations("features")
+
+  const [hits, setHits] = useState<readonly FeaturePageHit[]>(initialHits)
+  const [total, setTotal] = useState(initialTotal)
+  const [query, setQuery] = useState("")
+  const [selectedCategories, setSelectedCategories] = useState<
+    ReadonlySet<string>
+  >(new Set())
+  const [isPending, startTransition] = useTransition()
+
+  const isFirstRender = useRef(true)
+  useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false
+
+      return
+    }
+
+    const handle = setTimeout(() => {
+      startTransition(async () => {
+        const res = await searchAction({
+          locale,
+          query,
+          featureCategoryTitles: [...selectedCategories],
+          offset: 0,
+          limit: pageSize,
+        })
+
+        setHits(res.hits)
+        setTotal(res.total)
+      })
+    }, 200)
+
+    return () => clearTimeout(handle)
+  }, [query, selectedCategories, locale, pageSize, searchAction])
+
+  function toggleCategory(category: string) {
+    setSelectedCategories((prev) => {
+      const next = new Set(prev)
+
+      if (next.has(category)) {
+        next.delete(category)
+      } else {
+        next.add(category)
+      }
+
+      return next
+    })
+  }
+
+  function loadMore() {
+    startTransition(async () => {
+      const res = await searchAction({
+        locale,
+        query,
+        featureCategoryTitles: [...selectedCategories],
+        offset: hits.length,
+        limit: pageSize,
+      })
+
+      setHits((prev) => [...prev, ...res.hits])
+      setTotal(res.total)
+    })
+  }
+
+  const hasMore = hits.length < total
+
+  return (
+    <div className={cn("flex flex-col gap-8 lg:flex-row", className)}>
+      <SearchFilterSidebar
+        query={query}
+        onQueryChange={setQuery}
+        searchPlaceholder={t("searchPlaceholder")}
+        filterLabel={t("filterTagsLabel")}
+        filterOptions={categoryOptions}
+        selectedValues={selectedCategories}
+        onToggleValue={toggleCategory}
+        idPrefix="feature-category"
+      />
+
+      <div className="flex min-w-0 flex-1 flex-col gap-8">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {hits.map((item) => {
+            const href = item.url ?? ""
+            const isExternal = /^https?:\/\//.test(href)
+            const iconComponent = item.icon
+              ? ({
+                  media: item.icon,
+                  alt: item.icon.alternativeText ?? item.title,
+                } as unknown as Data.Component<"utilities.basic-image">)
+              : null
+
+            return (
+              <Card key={item.documentId ?? item.title} className="relative">
+                {item.feature_category && (
+                  <span className="bg-strapi-blue-100 text-strapi-blue-600 absolute top-3 left-3 rounded-sm px-2 py-0.5 text-xs font-medium">
+                    {item.feature_category}
+                  </span>
+                )}
+
+                <Link
+                  href={href || "#"}
+                  target={isExternal ? "_blank" : undefined}
+                  rel={isExternal ? "noopener noreferrer" : undefined}
+                  className="group flex h-full flex-col items-center justify-center pt-10 no-underline"
+                >
+                  <CardContent className="flex flex-col items-center gap-3 text-center">
+                    {iconComponent && (
+                      <StrapiBasicImage
+                        component={iconComponent}
+                        mode="responsive"
+                        sizes="40px"
+                        className="size-10"
+                        hideWhenMissing
+                      />
+                    )}
+
+                    <h3 className="text-foreground text-lg font-bold">
+                      {item.title}
+                    </h3>
+
+                    {item.description && (
+                      <p className="text-muted-foreground line-clamp-3 text-sm">
+                        {item.description}
+                      </p>
+                    )}
+                  </CardContent>
+                </Link>
+              </Card>
+            )
+          })}
+        </div>
+
+        {hasMore && (
+          <div className="flex justify-center">
+            <Button variant="outline" onClick={loadMore} disabled={isPending}>
+              {isPending ? `${t("loadMore")}…` : t("loadMore")}
+            </Button>
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}

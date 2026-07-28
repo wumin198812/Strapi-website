@@ -1,0 +1,23 @@
+{
+  "collectionName": "components_forms_hubspot_form_ssr",
+  "info": {
+    "displayName": "HubSpot Form (SSR)",
+    "icon": "envelop",
+    "description": "Server-side rendered HubSpot form with native UI controls"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "form": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::hubspot-form.hubspot-form"
+    },
+    "enableRecaptcha": {
+      "type": "boolean",
+      "default": false
+    }
+  }
+}

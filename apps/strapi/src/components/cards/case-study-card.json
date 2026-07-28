@@ -1,0 +1,17 @@
+{
+  "collectionName": "components_cards_case_study_card",
+  "info": {
+    "displayName": "CaseStudyCard",
+    "icon": "star",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "caseStudy": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::case-study.case-study",
+      "required": true
+    }
+  }
+}

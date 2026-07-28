@@ -1,0 +1,256 @@
+{
+  "seo": {
+    "metaTitle": "Strapi - the leading open-source headless CMS",
+    "metaDescription": "Strapi is the flexible, open-source headless CMS that gives developers the freedom to use their favorite tools and frameworks while letting editors manage and distribute content from anywhere.",
+    "metaImage": "",
+    "metaRobots": "index, follow",
+    "keywords": "headless CMS, open-source CMS, Node.js, content management, API, JavaScript",
+    "og": {
+      "title": "Strapi - the leading open-source headless CMS",
+      "description": "The flexible, open-source headless CMS that gives developers the freedom to use their favorite tools and frameworks.",
+      "url": "",
+      "siteName": "Strapi",
+      "image": "https://delicate-dawn-ac25646e6d.media.strapiapp.com/strapi-cover_1fabc982ce.png"
+    },
+    "twitter": {
+      "card": "summary_large_image",
+      "title": "Strapi - the leading open-source headless CMS",
+      "description": "The flexible, open-source headless CMS that gives developers the freedom to use their favorite tools and frameworks.",
+      "siteId": "",
+      "creator": "@strapijs",
+      "creatorId": "",
+      "imageUrl": "https://delicate-dawn-ac25646e6d.media.strapiapp.com/strapi-cover_1fabc982ce.png"
+    }
+  },
+  "general": {
+    "noOptionsAvailable": "No options available",
+    "search": "Search",
+    "loading": "Loading",
+    "cancel": "Cancel",
+    "close": "Close",
+    "submitForm": "Submit",
+    "saveChanges": "Save changes",
+    "moreInformation": "More information",
+    "bestValue": "Best value"
+  },
+  "plans": {
+    "planFeatureCategory": {
+      "cloud": "Cloud",
+      "general": "General",
+      "terms-and-services": "Terms & Services",
+      "usage": "Usage"
+    },
+    "pricingSwitcher": {
+      "monthly": "Monthly",
+      "yearly": "Yearly"
+    },
+    "pricingCard": {
+      "billedYearly": "billed yearly"
+    },
+    "pricingCardSso": {
+      "addon": "Add-on"
+    },
+    "comparisonTable": {
+      "included": "Included",
+      "notIncluded": "Not included"
+    },
+    "pricingCheckoutModal": {
+      "buyNow": "Buy now",
+      "title": "Add seats to your plan",
+      "selfHosted": "Self-hosted",
+      "billingPeriodMonthly": "/month",
+      "seats": "Seats",
+      "totalBeforeTaxes": "Total before applicable taxes",
+      "totalShownAtCheckout": "Total will be shown at checkout.",
+      "cancel": "Cancel",
+      "continue": "Continue",
+      "decreaseSeatCountAria": "Decrease seat count",
+      "increaseSeatCountAria": "Increase seat count",
+      "checkoutConfigMissingError": "Missing checkout configuration for pricing modal.",
+      "checkoutBaseUrlMissingError": "Missing NEXT_PUBLIC_CHARGEBEE_URL environment variable.",
+      "checkoutUrlInvalidError": "Invalid checkout URL.",
+      "dialogDescription": "Configure your plan seats and add-ons before checkout",
+      "ssoToggle": "Toggle SSO add-on",
+      "seatCountLabel": "Number of seats",
+      "checkoutError": "Unable to proceed to checkout. Please try again.",
+      "redirecting": "Redirecting..."
+    }
+  },
+  "tables": {
+    "previousPage": "Previous page",
+    "nextPage": "Next page",
+    "lastPage": "Last page",
+    "firstPage": "First page",
+    "rowsPerPage": "Rows per page",
+    "pageXOfY": "Page {x} of {y}",
+    "ascending": "Ascending",
+    "descending": "Descending",
+    "noData": "No data"
+  },
+  "sections": {
+    "faq": {
+      "title": "Frequently Asked Questions"
+    }
+  },
+  "caseStudies": {
+    "title": "User Stories",
+    "sectionLabel": "Case Studies",
+    "intro": "Explore how innovative companies use Strapi to build blazing-fast, fully customizable digital experiences. From startups to global enterprises, these case studies showcase how teams ship faster, rationalize their Application Portfolio with a single Content Hub.",
+    "description": "See how teams ship with Strapi.",
+    "readStory": "Read case study",
+    "searchPlaceholder": "Search user stories...",
+    "filterCategoriesLabel": "Categories",
+    "loadMore": "See more"
+  },
+  "features": {
+    "searchPlaceholder": "Search features...",
+    "loadMore": "See more",
+    "viewFeature": "Learn more",
+    "filterTagsLabel": "Categories"
+  },
+  "blog": {
+    "title": "Blog",
+    "description": "Tutorials, product updates, and engineering insights.",
+    "loadMore": "Load More Articles",
+    "seeAllRelated": "See all {category} articles",
+    "articles": "Articles",
+    "relatedPosts": "Related Posts",
+    "updatedOn": "Updated on {date}",
+    "breadcrumbs": {
+      "home": "Blog",
+      "ariaLabel": "Breadcrumb"
+    },
+    "level": {
+      "beginner": "Beginner",
+      "intermediate": "Intermediate",
+      "advanced": "Advanced"
+    },
+    "share": {
+      "label": "Share this article",
+      "twitter": "Share on X",
+      "linkedin": "Share on LinkedIn",
+      "facebook": "Share on Facebook",
+      "email": "Share via email"
+    }
+  },
+  "forms": {
+    "unavailableTitle": "Form unavailable",
+    "unavailableDescription": "This form could not be loaded. Please try again later.",
+    "selectPlaceholder": "Select...",
+    "submitting": "Submitting…",
+    "submitDefault": "Submit",
+    "submissionFailed": "Submission failed",
+    "submissionError": "An error occurred while submitting the form.",
+    "submissionSuccess": "Thanks for submitting the form.",
+    "noFieldsTitle": "No form fields configured",
+    "noFieldsDescription": "This form has no visible fields. Please check the HubSpot form configuration.",
+    "reviewErrors": "Please review the highlighted fields above and correct the errors.",
+    "demo": {
+      "settingUp": "Setting up your demo...",
+      "readyTitle": "Your demo is ready!",
+      "readyDescription": "Access your hosted Strapi instance:",
+      "strapiAdmin": "Strapi Admin",
+      "frontend": "Frontend",
+      "credentials": "Credentials",
+      "email": "Email:",
+      "password": "Password:",
+      "fallbackTitle": "Setting up your demo...",
+      "fallbackDescription": "You'll receive access details via email shortly."
+    }
+  },
+  "comps": {
+    "fileInput": {
+      "label": "Select file",
+      "dragAndDrop": "Add file by dragging or select by clicking",
+      "validFileTypes": "File must be in {validFileTypes} format",
+      "wrongFileType": "This file type is not supported",
+      "selectedFile": "Selected file: {fileName}",
+      "removeFile": "Remove file"
+    },
+    "datePicker": {
+      "label": "Select date"
+    },
+    "dateRangePicker": {
+      "label": "Select date range"
+    },
+    "themeToggle": {
+      "label": "Toggle theme"
+    },
+    "dialog": {
+      "confirmClose": "Do you want to close the dialog? You will lose all unsaved changes."
+    }
+  },
+  "errors": {
+    "global": {
+      "title": "An unknown error occurred",
+      "tryAgain": "Try again",
+      "invalidContent": "This content could not be displayed",
+      "somethingWentWrong": "Something went wrong 🥺"
+    },
+    "notFound": {
+      "title": "Page not found",
+      "description": "The page you are looking for was not found.",
+      "solution": "Please check if you have entered the correct URL or return to the home page.",
+      "redirect": "Go to home page"
+    },
+    "forms": {
+      "errorsInForm": "The form contains errors",
+      "checkFormForErrors": "Please check if any values are missing"
+    },
+    "zodValidation": {
+      "invalid_type": "Expected type is {expected}, but received {received}",
+      "invalid_type_received_undefined": "Field is required",
+      "invalid_literal": "Invalid value, expected {expected}",
+      "invalid_union": "Invalid value",
+      "invalid_string": {
+        "regex": "Invalid format"
+      },
+      "too_small": {
+        "string": {
+          "exact": "String must be exactly {minimum} characters",
+          "inclusive": "String must be at least {minimum} characters",
+          "not_inclusive": "String must be more than {minimum} characters"
+        },
+        "number": {
+          "exact": "Value must be exactly {minimum}",
+          "inclusive": "Minimum value is {minimum}",
+          "not_inclusive": "Number must be greater than {minimum}"
+        }
+      },
+      "too_big": {
+        "string": {
+          "exact": "String must be exactly {maximum} characters",
+          "inclusive": "String must be at most {maximum} characters",
+          "not_inclusive": "String must be less than {maximum} characters"
+        },
+        "number": {
+          "exact": "Value must be exactly {maximum}",
+          "inclusive": "Maximum value is {maximum}",
+          "not_inclusive": "Number must be less than {maximum}"
+        }
+      },
+      "custom": {
+        "password": "Passwords do not match",
+        "passwordWithNumber": "String must contain at least 1 number",
+        "phoneNumber": "This field must contain 9 numbers"
+      }
+    }
+  },
+  "cmsComparison": {
+    "compare": "Compare",
+    "seeAll": "See all our comparators",
+    "vs": "vs",
+    "disclaimerTitle": "Disclaimer",
+    "disclaimer": "The data on this page is regularly updated, however don't hesitate to [contact us](mailto:marketing@strapi.io) if you notice a mistake."
+  },
+  "newsletter": {
+    "title": "Join our Newsletter",
+    "description": "Get all the latest news and events.",
+    "emailPlaceholder": "Email",
+    "submitLabel": "Subscribe",
+    "consentText": "By submitting this form you consent to us emailing you occasionally about our products and services. You can unsubscribe from emails at any time, and we will never pass your email to third parties.",
+    "successMessage": "Thanks for subscribing! Check your inbox to confirm.",
+    "errorMessage": "Something went wrong. Please try again.",
+    "unavailableMessage": "Newsletter signup is not configured yet."
+  }
+}

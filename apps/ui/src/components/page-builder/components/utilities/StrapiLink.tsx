@@ -1,0 +1,91 @@
+import type { Data } from "@repo/strapi-types"
+import type React from "react"
+
+import { AppLink } from "@/components/elementary/AppLink"
+import { StrapiBasicImage } from "@/components/page-builder/components/utilities/StrapiBasicImage"
+
+export interface StrapiLinkProps {
+  readonly component: Data.Component<"utilities.link"> | undefined | null
+  readonly children?: React.ReactNode
+  readonly className?: string
+  readonly hideWhenMissing?: boolean
+  readonly adornmentClassName?: string
+}
+
+export const getStrapiLinkHref = (
+  component?: Data.Component<"utilities.link"> | null
+) => {
+  // Add more when needed
+  switch (component?.type) {
+    case "external":
+      return component.href
+    case "page":
+      return component.page?.fullPath ?? "#"
+
+    default:
+      return
+  }
+}
+
+export function StrapiLink({
+  component,
+  children,
+  className,
+  hideWhenMissing,
+  adornmentClassName,
+}: StrapiLinkProps) {
+  if (component == null && hideWhenMissing) {
+    return null
+  }
+
+  const { newTab = false, label, decorations } = component ?? {}
+
+  const {
+    variant = "link",
+    size = "default",
+    leftIcon,
+    rightIcon,
+    hasIcons = false,
+  } = decorations ?? {}
+
+  const linkHref = getStrapiLinkHref(component)
+
+  if (!linkHref) {
+    return children ?? label ?? null
+  }
+
+  return (
+    <AppLink
+      href={linkHref}
+      openInNewTab={newTab ?? false}
+      className={className}
+      adornmentClassName={adornmentClassName}
+      startAdornment={
+        hasIcons && leftIcon ? (
+          <StrapiBasicImage
+            component={leftIcon}
+            mode="fill"
+            className="object-contain"
+            decorative
+            sizes="16px"
+          />
+        ) : undefined
+      }
+      endAdornment={
+        hasIcons && rightIcon ? (
+          <StrapiBasicImage
+            component={rightIcon}
+            mode="fill"
+            className="object-contain"
+            decorative
+            sizes="16px"
+          />
+        ) : undefined
+      }
+      variant={variant}
+      size={size}
+    >
+      {children ?? label}
+    </AppLink>
+  )
+}

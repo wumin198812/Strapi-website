@@ -1,0 +1,40 @@
+{
+  "collectionName": "components_elements_team_member_items",
+  "info": {
+    "displayName": "TeamMemberItem",
+    "icon": "user",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "image": {
+      "type": "component",
+      "repeatable": false,
+      "component": "utilities.basic-image"
+    },
+    "name": {
+      "type": "string"
+    },
+    "role": {
+      "type": "string",
+      "required": true
+    },
+    "department": {
+      "type": "string"
+    },
+    "secondDepartment": {
+      "type": "string"
+    },
+    "socialLinks": {
+      "type": "component",
+      "repeatable": true,
+      "component": "utilities.social-link"
+    },
+    "location": {
+      "type": "string"
+    },
+    "bio": {
+      "type": "text"
+    }
+  }
+}

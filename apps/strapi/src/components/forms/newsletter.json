@@ -1,0 +1,16 @@
+{
+  "collectionName": "components_forms_newsletter",
+  "info": {
+    "displayName": "Newsletter",
+    "icon": "paperPlane",
+    "description": "Newsletter CTA — frontend renders fixed copy; only the HubSpot form is configurable"
+  },
+  "options": {},
+  "attributes": {
+    "hubspotForm": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::hubspot-form.hubspot-form"
+    }
+  }
+}
